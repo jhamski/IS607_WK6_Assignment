@@ -26,7 +26,7 @@ str(mtcars)
 
 Fuel economy (mpg), displacement (disp), horsepower (hp), rear axle ratio (drat), weight (wt), and quarter mile time (qsec) are all appropriately stored as numeric. 
 
-Number of cynlinders (cyl), ? (vs), transmission type (am), number of forward gears (gear) and number of carburetor (carb) are categorical variables currently stored as numeric. We can change them to the more appropriate class factor.
+Number of cynlinders (cyl), ? (vs), transmission type (am), number of forward gears (gear) and number of carburetors (carb) are categorical variables currently stored as numeric. We can change them to the more appropriate class factor.
 
 ```{r}
 mtcars$cyl <- as.factor(mtcars$cyl)
@@ -59,11 +59,11 @@ summary(cars.numeric)
 
 Finding the frequency of a categorical variable: transmission type (am).
 ```{r}
-
+table(mtcars$am)
 ```
-Finding the frequency of one categorical variable based on another: carborators by cylinders.
+Finding the frequency of one categorical variable based on another: carburetor by cylinders.
 ```{r}
-
+table(mtcars$carb, mtcars$cyl, dnn=c("No. of Carburetors", "No. of Cylinders"))
 ```
 
 Create a graph for a single numeric variable. I decided to make a boxplot of fuel economy (mpg) grouped by number of cynlinders (cyl). As you might expect, eight cylinder engines have terrible fuel economy, whereas four cynlinder engines are higher. 
@@ -76,6 +76,6 @@ Create a scatterplot of two numeric variables. I created a scatteplot showing ho
 ggplot(data = mtcars, aes(x=hp, y=qsec))+
   geom_point(pch=17, color="blue", size=2)+
   geom_smooth(method="lm", color="red", linetype=2)+
-  labs(title="Automobile Data", x="Horsepower", y="Quarter Mile Time (sec)")
+  labs(title="Quarter-mile Time vs. Horsepower in the Motor Trend Car Dataset", x="Horsepower", y="Quarter Mile Time (sec)")
 ```
 
