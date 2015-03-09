@@ -12,18 +12,70 @@ output: html_document
 5. Create a graph for a single numeric variable.
 6. Create a scatterplot of two numeric variables.
 
-> Packages used: datasets, ggplot2, dplyr, tidyr
+> Packages used: datasets, ggplot2, dplyr
 
 ```{r, echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
 library(datasets)
 library(ggplot2)
 library(dplyr)
-library(tidyr)
 ```
 ```{r}
 data(mtcars)
-
 str(mtcars)
 ```
 
-While all data are of the class numeric, number of cynlinders (cyl), ? (vs), transmission type (am), number of forward gears (gear) and number of carburetor (carb) are better described as categorical variables.
+Fuel economy (mpg), displacement (disp), horsepower (hp), rear axle ratio (drat), weight (wt), and quarter mile time (qsec) are all appropriately stored as numeric. 
+
+Number of cynlinders (cyl), ? (vs), transmission type (am), number of forward gears (gear) and number of carburetor (carb) are categorical variables currently stored as numeric. We can change them to the more appropriate class factor.
+
+```{r}
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$vs <- as.factor(mtcars$vs)
+mtcars$am <- as.factor(mtcars$am)
+mtcars$gear <- as.factor(mtcars$gear)
+mtcars$carb <- as.factor(mtcars$carb)
+```
+
+I'll change the transmission type to a text factor as this dataset doesn't have that kind of categorical value. 
+
+```{r}
+mtcars$am <-factor(mtcars$am, levels=c(1,0), labels=c("automatic", "manual"))
+
+```
+The rest of the categorical vectors can be ordered. 
+```{r}
+mtcars$cyl <- factor(mtcars$cyl, ordered = TRUE)
+mtcars$vs <- factor(mtcars$vs, ordered = TRUE)
+mtcars$gear <- factor(mtcars$gear, ordered = TRUE)
+mtcars$carb <- factor(mtcars$carb, ordered = TRUE)
+str(mtcars)
+```
+
+The *summary* function calculates mean, median, 25th and 75th quartiles, min, and max for the numeric vectors. Using the *select* function from the dplyr we can limit to numeric vectors from the mtcars data frame. 
+```{r}
+cars.numeric <-select(mtcars, mpg, disp, hp, drat, wt, qsec)
+summary(cars.numeric)
+```
+
+Finding the frequency of a categorical variable: transmission type (am).
+```{r}
+
+```
+Finding the frequency of one categorical variable based on another: carborators by cylinders.
+```{r}
+
+```
+
+Create a graph for a single numeric variable. I decided to make a boxplot of fuel economy (mpg) grouped by number of cynlinders (cyl). As you might expect, eight cylinder engines have terrible fuel economy, whereas four cynlinder engines are higher. 
+```{r}
+boxplot(mtcars$mpg ~ mtcars$cyl, main = "Fuel Economy (MPG) Boxplot", ylab= "Miles Per Gallon", xlab = "Number of Cylinders")
+```
+
+Create a scatterplot of two numeric variables. I created a scatteplot showing how quartermile time generally decreases with increasing horsepower. The grey area represents a 95% confidence region. 
+```{r}
+ggplot(data = mtcars, aes(x=hp, y=qsec))+
+  geom_point(pch=17, color="blue", size=2)+
+  geom_smooth(method="lm", color="red", linetype=2)+
+  labs(title="Automobile Data", x="Horsepower", y="Quarter Mile Time (sec)")
+```
+
